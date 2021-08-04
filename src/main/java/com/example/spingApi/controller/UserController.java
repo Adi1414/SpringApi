@@ -1,9 +1,16 @@
 package com.example.spingApi.controller;
 
+import com.example.spingApi.exception.UserAlreadyExistException;
+import com.example.spingApi.exception.UserNotFoundException;
 import com.example.spingApi.restServices.User;
 import com.example.spingApi.restServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,17 +28,36 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public Optional<User> getUserByID(@PathVariable("id") Long id){
-        return userService.getUserById(id);
+        try{
+            return userService.getUserById(id);
+        }
+        catch(UserNotFoundException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+        }
     }
 
     @PostMapping("/users")
-    public User createUser(@RequestBody User user){
-        return userService.createUser(user);
+    public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder builder){
+        try {
+            userService.createUser(user);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(builder.path("user/{id}").buildAndExpand(user.getId()).toUri());
+            return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        }
+        catch (UserAlreadyExistException ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+
     }
 
     @PutMapping("/user/{id}")
     public User updateUser(@PathVariable("id") Long id, @RequestBody User user){
-        return userService.updateUser(id, user);
+        try{
+            return userService.updateUser(id, user);
+        }
+        catch (UserNotFoundException ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
     }
 
     @DeleteMapping("user/{id}")
@@ -40,7 +66,7 @@ public class UserController {
     }
 
     @GetMapping("user/by/{username}")
-    public User getUserByName(@PathVariable("username") String username){
+    public Optional<User> getUserByName(@PathVariable("username") String username){
         return userService.getUserByName(username);
     }
 }
