@@ -1,6 +1,8 @@
 package com.example.spingApi.restServices;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
@@ -9,9 +11,11 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    @NotEmpty(message = "First name should exist")
     @Column(name = "USER_NAME", length = 50, nullable = false, unique = true)
     private String firstName;
 
+    @Size(min = 2, message = "Min 2 characters should be there")
     @Column(name = "LAST_NAME", length = 50, nullable = false)
     private String lastName;
 
