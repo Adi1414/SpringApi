@@ -1,8 +1,11 @@
 package com.example.spingApi.restServices;
 
+import org.springframework.web.bind.annotation.Mapping;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -27,6 +30,9 @@ public class User {
 
     @Column(name = "SSN", length = 50, nullable = false, unique = true)
     private String ssn;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Order> orders;
 
     public User(){
 
@@ -91,7 +97,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Order{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -99,5 +105,13 @@ public class User {
                 ", role='" + role + '\'' +
                 ", ssn='" + ssn + '\'' +
                 '}';
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

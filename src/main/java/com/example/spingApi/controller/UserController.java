@@ -21,17 +21,18 @@ import java.util.Optional;
 
 @RestController
 @Validated
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public Optional<User> getUserByID(@PathVariable("id") @Min(1) Long id){
         try{
             return userService.getUserById(id);
@@ -41,12 +42,12 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder){
         try {
             userService.createUser(user);
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(builder.path("user/{id}").buildAndExpand(user.getId()).toUri());
+            headers.setLocation(builder.path("employee/{id}").buildAndExpand(user.getId()).toUri());
             return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
         }
         catch (UserAlreadyExistException ex){
@@ -55,7 +56,7 @@ public class UserController {
 
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     public User updateUser(@PathVariable("id") Long id, @RequestBody User user){
         try{
             return userService.updateUser(id, user);
@@ -65,12 +66,12 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("user/{id}")
+    @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable("id")  Long id){
         userService.deleteUser(id);
     }
 
-    @GetMapping("user/by/{username}")
+    @GetMapping("/by/{username}")
     public Optional<User> getUserByName(@PathVariable("username") String username) throws FirstNameNotFoundException {
         Optional<User> user =  userService.getUserByName(username);
         if(!user.isPresent()){

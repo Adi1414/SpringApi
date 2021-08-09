@@ -23,7 +23,7 @@ public class UserService {
     public Optional<User> getUserById(Long id) throws UserNotFoundException {
         Optional<User> user =  userRepository.findById(id);
         if(!user.isPresent()){
-            throw new UserNotFoundException("User do not exist");
+            throw new UserNotFoundException("Order do not exist");
         }
         return user;
     }
@@ -39,7 +39,7 @@ public class UserService {
     public User updateUser(Long id, User user) throws UserNotFoundException {
         Optional<User> OptionalUser =  userRepository.findById(id);
         if(!OptionalUser.isPresent()){
-            throw new UserNotFoundException("User do not exist");
+            throw new UserNotFoundException("Order do not exist");
         }
         user.setId(id);
         return userRepository.save(user);
@@ -48,7 +48,7 @@ public class UserService {
     public void deleteUser(Long id) {
         Optional<User> OptionalUser =  userRepository.findById(id);
         if(!OptionalUser.isPresent()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User do not exist");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order do not exist");
         }
         userRepository.deleteById(id);
     }
