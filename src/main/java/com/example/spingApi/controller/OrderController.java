@@ -22,12 +22,13 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @GetMapping("/{id}/orders")
-    public List<Order> getAllOrders(@PathVariable("id") Long id) throws UserNotFoundException {
+    public User getAllOrders(@PathVariable("id") Long id) throws UserNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if(!user.isPresent()){
             throw new UserNotFoundException("User not found");
         }
-        return user.get().getOrders();
+
+        return user.get();
     }
 
     @PostMapping("/{id}/orders")
@@ -37,6 +38,11 @@ public class OrderController {
             throw new UserNotFoundException("User not found");
         }
         order.setUser(user.get());
-        return orderRepository.save(order);
+       return orderRepository.save(order);
+    }
+
+    @GetMapping("/orders")
+    public List<Order> getAllOrders(){
+        return orderRepository.findAll();
     }
 }
