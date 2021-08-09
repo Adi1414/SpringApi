@@ -1,13 +1,14 @@
 package com.example.spingApi.restServices;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order extends RepresentationModel {
     @Id
     @GeneratedValue
     private Long id;

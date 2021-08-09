@@ -1,15 +1,14 @@
 package com.example.spingApi.restServices;
 
-import org.springframework.web.bind.annotation.Mapping;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends RepresentationModel {
     @Id
     @GeneratedValue
     private Long id;
