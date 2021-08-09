@@ -5,6 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.web.bind.annotation.Mapping;
 
 @Entity
 @Table(name = "user")
@@ -30,7 +31,7 @@ public class User extends RepresentationModel {
     @Column(name = "SSN", length = 50, nullable = false, unique = true)
     private String ssn;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
     public User(){

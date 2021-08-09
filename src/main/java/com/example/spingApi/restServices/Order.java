@@ -17,7 +17,7 @@ public class Order extends RepresentationModel {
     @Column(name = "USER_NAME", length = 50, nullable = false, unique = true)
     private String detail;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private User user;
 
